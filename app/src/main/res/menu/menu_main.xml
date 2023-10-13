@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_clima"
+        android:icon="@drawable/partly_cloudy_day_24"
+        android:title="Clima"/>
+
+    <item
+        android:id="@+id/menu_pronostico"
+        android:icon="@drawable/partly_cloudy_day_24"
+        android:title="Pronóstico"/>
+
+
+
+
+</menu>

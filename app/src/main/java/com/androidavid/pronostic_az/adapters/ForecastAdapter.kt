@@ -1,4 +1,4 @@
-package com.androidavid.pronostic_az
+package com.androidavid.pronostic_az.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.androidavid.pronostic_az.ForecastModel.ForecastItem
+import com.androidavid.pronostic_az.R
+import com.androidavid.pronostic_az.model.ForecastModel.ForecastItem
 
 class ForecastAdapter(private val forecastData: List<ForecastItem>) :
     RecyclerView.Adapter<ForecastAdapter.ForecastViewHolder>()  {
@@ -19,7 +20,7 @@ class ForecastAdapter(private val forecastData: List<ForecastItem>) :
     override fun onBindViewHolder(holder: ForecastViewHolder, position: Int) {
         val forecastItem = forecastData[position]
 
-        // Actualiza las vistas con los datos del pronóstico
+
         val temperatureCelsius = forecastItem.main.temp - 273.15
 
         holder.forecastIconImageView.setImageResource(getWeatherIconResourceId(forecastItem.weather[0].icon))

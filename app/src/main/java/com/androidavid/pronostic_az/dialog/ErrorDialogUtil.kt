@@ -1,4 +1,4 @@
-package com.androidavid.pronostic_az
+package com.androidavid.pronostic_az.dialog
 
 import android.app.AlertDialog
 import android.content.Context

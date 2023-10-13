@@ -1,4 +1,4 @@
-package com.androidavid.pronostic_az.ForecastModel
+package com.androidavid.pronostic_az.model.ForecastModel
 
 data class ForecastResponse(
     val city: City,

@@ -1,4 +1,4 @@
-package com.androidavid.pronostic_az.ForecastModel
+package com.androidavid.pronostic_az.model.ForecastModel
 
 import com.androidavid.pronostic_az.model.Clouds
 import com.androidavid.pronostic_az.model.Main

@@ -1,4 +1,4 @@
-package com.androidavid.pronostic_az
+package com.androidavid.pronostic_az.ui
 
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
@@ -17,15 +17,22 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.Manifest
-import android.content.Context
-import android.net.ConnectivityManager
 import android.widget.Button
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.androidavid.pronostic_az.ForecastModel.ForecastResponse
+import com.androidavid.pronostic_az.adapters.ForecastAdapter
+import com.androidavid.pronostic_az.R
+import com.androidavid.pronostic_az.constants.Config
+import com.androidavid.pronostic_az.model.ForecastModel.ForecastResponse
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private val apiKey = Config.API_KEY
 
     private val LOCATION_PERMISSION_REQUEST_CODE = 1
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -101,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                     // El usuario concedió permisos, puedes continuar con la lógica para obtener la ubicación.
                     getLastKnownLocation()
                 } else {
-                    // El usuario denegó los permisos, debes manejar esto adecuadamente, por ejemplo, mostrando un mensaje.
+                    // El usuario denegó los permisos hacer algo
                 }
             }
         }
@@ -128,9 +135,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
     private fun getCurrentWeatherByLocation(latitude: String, longitude: String) {
+        GlobalScope.launch(Dispatchers.IO) {
 
-        val apiKey = "3933fc15820143a022522600fd31c7ee"
-        val call = apiInterface.getCurrentWeatherData(latitude, longitude, apiKey)
+
+            val call = apiInterface.getCurrentWeatherData(latitude, longitude, apiKey)
 
 
 
@@ -157,45 +165,53 @@ class MainActivity : AppCompatActivity() {
                             updateUI(temperature, description, weatherIcon, cityName)
                         }
                     } else {
-                        // Maneja los errores de la respuesta de la API aquí
+                        // Manejamos los errores de la respuesta de la API aquí
                     }
                 }
 
                 override fun onFailure(call: Call<WeatherModel>, t: Throwable) {
-                    // Maneja los errores de la solicitud aquí
+                    // Manejamos los errores de la solicitud aquí
                 }
             })
-
+        }
     }
 
     private fun get5DayForecastByLocation(latitude: String, longitude: String) {
-        val apiKey = "3933fc15820143a022522600fd31c7ee" // Reemplaza con tu clave de API de OpenWeatherMap
-        val count = 40 // Obtener el pronóstico para los próximos 5 días
 
-        val call = apiInterface.getDailyWeatherForecast(latitude, longitude, count, apiKey)
 
-        call.enqueue(object : Callback<ForecastResponse> {
-            override fun onResponse(call: Call<ForecastResponse>, response: Response<ForecastResponse>) {
-                if (response.isSuccessful) {
-                    val forecastData = response.body()
-                    if (forecastData != null) {
-                        // pronóstico de 5 días/3 horas
-                        val dailyForecasts = forecastData.list
+            val count = 40
+            val call = apiInterface.getDailyWeatherForecast(latitude, longitude, count, apiKey)
 
-                        val forecastRecyclerView = findViewById<RecyclerView>(R.id.forecastRecyclerView)
+            call.enqueue(object : Callback<ForecastResponse> {
+                override fun onResponse(  call: Call<ForecastResponse>,
+                    response: Response<ForecastResponse>) {
 
-                        val forecastAdapter = ForecastAdapter(dailyForecasts) // Pasa los datos del pronóstico
-                        forecastRecyclerView.adapter = forecastAdapter
+                    if (response.isSuccessful) {
+                        val forecastData =response.body()
+                            if (forecastData != null) {
+                                // pronóstico de 5 días/3 horas
+                                val dailyForecasts = forecastData.list
+
+                                val forecastRecyclerView =
+                                    findViewById<RecyclerView>(R.id.forecastRecyclerView)
+
+                                val forecastAdapter =
+                                    ForecastAdapter(dailyForecasts) // Pasa los datos del pronóstico
+                                forecastRecyclerView.adapter = forecastAdapter
+                            }
+                            else {
+
+                            }
+
+
                     }
-                } else {
+                }
+
+                override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
 
                 }
-            }
+            })
 
-            override fun onFailure(call: Call<ForecastResponse>, t: Throwable) {
-
-            }
-        })
     }
 
 

@@ -2,9 +2,12 @@
 
 # **App de clima basado en tu ubicacion**  
 
-## Utliza esta api key para las pruebas si lo deseas  
+## Utiliza esta api key para las pruebas si lo deseas  
 
 API_KEY = "3933fc15820143a022522600fd31c7ee"
+
+Poco a poco iremos subiendo de nivel agregando mas funciones y mejorando el diseño.
+descarga el apk y ejecutalo en tu movil.
 
 
 
